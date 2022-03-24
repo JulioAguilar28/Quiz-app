@@ -1,4 +1,8 @@
+require('custom-env').env(true)
+
 export default {
+  dev: true,
+
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
@@ -19,6 +23,8 @@ export default {
       }
     ]
   },
+
+  env: process.env,
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ['@/assets/main.css'],
