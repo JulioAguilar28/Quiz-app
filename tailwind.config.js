@@ -1,3 +1,5 @@
+const colors = require('tailwindcss/colors')
+
 module.exports = {
   purge: [],
   darkMode: false, // or 'media' or 'class'
@@ -5,7 +7,11 @@ module.exports = {
     colors: {
       primary: '#FCC822',
       secondary: '#333333',
-      white: '#FFFFFF'
+      white: colors.white,
+      gray: colors.gray,
+      emerald: colors.emerald,
+      indigo: colors.indigo,
+      yellow: colors.yellow
     }
   },
   variants: {

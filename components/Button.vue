@@ -17,9 +17,9 @@ enum ButtonEvents {
 }
 
 interface ButtonState {
-  primaryClasses: Array<String>
-  secondaryClasses: Array<String>
-  classes: Array<String>
+  primaryClasses: Array<string>
+  secondaryClasses: Array<string>
+  classes: Array<string>
 }
 
 export default defineComponent({
