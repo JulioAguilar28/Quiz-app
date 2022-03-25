@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!state.loading" class="h-screen">
+  <div v-if="!state.loading" class="h-full flex flex-col">
     <h2 class="text-xl text-center text-secondary my-4">
       Question number: {{ state.currentQuestionIndex + 1 }}
     </h2>
@@ -9,9 +9,14 @@
         v-for="(value, key) in state.currentPossibleAnswers"
         :key="key"
         :option="value"
+        :is-selected="state.userSelectedAnswer === key"
         @selected="selectOptionHandler(key)"
       />
     </div>
+    <GameControlsController
+      :enable-next-button="state.userSelectedAnswer"
+      @next="nextQuestionHandler"
+    />
   </div>
 </template>
 
@@ -19,9 +24,10 @@
 import { defineComponent, onMounted, reactive, computed } from '@nuxtjs/composition-api'
 import QuestionView from './QuestionView.vue'
 import Option from './Option.vue'
+import GameControlsController from './GameControlsController.vue'
 import * as QuizService from '@/services/QuizService'
 import type { Question } from '@/models/Question'
-import type { CorrectAnswers, PossibleAnswers } from '~/models/AppModels'
+import type { CorrectAnswers, PossibleAnswers } from '@/models/AppModels'
 
 interface GameControllerState {
   questions?: Array<Question>
@@ -37,7 +43,7 @@ interface GameControllerState {
 }
 
 export default defineComponent({
-  components: { Option, QuestionView },
+  components: { Option, QuestionView, GameControlsController },
   setup(_props, _context) {
     const state: GameControllerState = reactive({
       questions: undefined,
@@ -66,9 +72,14 @@ export default defineComponent({
       state.userSelectedAnswer = optionKey
     }
 
+    const nextQuestionHandler = () => {
+      nextQuestion(state)
+    }
+
     return {
       state,
-      selectOptionHandler
+      selectOptionHandler,
+      nextQuestionHandler
     }
   }
 })
@@ -79,6 +90,13 @@ const getQuizByCategory = async (state: GameControllerState) => {
     state.questions = await QuizService.getQuizByCategory('code')
     state.loading = false
   } catch (_error) {}
+}
+
+const nextQuestion = (state: GameControllerState) => {
+  if (state.currentQuestionIndex < state.totalQuestions - 1) {
+    state.currentQuestionIndex++
+    state.userSelectedAnswer = undefined
+  }
 }
 </script>
 

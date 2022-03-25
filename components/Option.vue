@@ -1,7 +1,8 @@
 <template>
   <div
     v-if="option"
-    class="w-full h-auto max-h-40 p-2 bg-disabled text-secondary flex flex-col items-center justify-center hover:bg-primary hover:text-white"
+    class="w-full h-auto max-h-40 p-2 text-secondary flex flex-col items-center justify-center hover:bg-primary hover:text-white"
+    :class="isSelected ? ['bg-primary', 'text-white'] : ['bg-disabled']"
     @click="selectedHandler"
   >
     <h2 class="text-xl">{{ option }}</h2>
@@ -20,6 +21,10 @@ export default defineComponent({
     option: {
       type: String,
       default: ''
+    },
+    isSelected: {
+      type: Boolean,
+      default: false
     }
   },
   emits: {
