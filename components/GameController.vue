@@ -9,7 +9,7 @@ import * as QuizService from '@/services/QuizService'
 export default defineComponent({
   setup() {
     onMounted(() => {
-      QuizService.getQuizByCategory('Linux')
+      QuizService.getQuizByCategory('code')
     })
   }
 })
