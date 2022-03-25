@@ -3,7 +3,7 @@ import type { CorrectAnswers, PossibleAnswers, QuestionModel } from './AppModels
 export class Question implements QuestionModel {
   id: number
   question: string
-  answers: PossibleAnswers
+  possibleAnswers: PossibleAnswers
   category: string
   correctAnswer: string
   correctAnswers: CorrectAnswers
@@ -13,7 +13,7 @@ export class Question implements QuestionModel {
   public constructor(question: QuestionModel) {
     this.id = question.id
     this.question = question.question
-    this.answers = question.answers
+    this.possibleAnswers = question.possibleAnswers
     this.category = question.category
     this.correctAnswer = question.correctAnswer
     this.correctAnswers = question.correctAnswers

@@ -8,18 +8,18 @@ export interface PossibleAnswers {
 }
 
 export interface CorrectAnswers {
-  answerACorrect: boolean
-  answerBCorrect: boolean
-  answerCCorrect: boolean
-  answerDCorrect: boolean
-  answerECorrect: boolean
-  answerFCorrect: boolean
+  answerA: boolean
+  answerB: boolean
+  answerC: boolean
+  answerD: boolean
+  answerE: boolean
+  answerF: boolean
 }
 
 export interface QuestionModel {
   id: number
   question: string
-  answers: PossibleAnswers
+  possibleAnswers: PossibleAnswers
   category: string
   correctAnswer: string
   correctAnswers: CorrectAnswers
