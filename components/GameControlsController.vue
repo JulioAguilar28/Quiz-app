@@ -30,10 +30,6 @@ export default defineComponent({
     enableNextButton: {
       type: Boolean,
       default: false
-    },
-    resetTimer: {
-      type: Boolean,
-      default: false
     }
   },
   emits: {
@@ -45,22 +41,23 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      initTimer(state)
+      initTimer(state, emit)
     })
 
     const nextHandler = () => {
-      emit(GameControlsControllerEvents.Next)
+      emit(GameControlsControllerEvents.Next, state.remainingTime)
     }
 
     return { state, nextHandler }
   }
 })
 
-const initTimer = (state: GameControlsControllerState) => {
+const initTimer = (state: GameControlsControllerState, emit: any) => {
   const timerId = setInterval(() => {
     state.remainingTime--
 
     if (state.remainingTime === 0) {
+      emit(GameControlsControllerEvents.Next, 0)
       clearInterval(timerId)
     }
   }, ONE_SECOND)

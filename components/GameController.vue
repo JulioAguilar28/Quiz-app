@@ -14,7 +14,8 @@
       />
     </div>
     <GameControlsController
-      :enable-next-button="state.userSelectedAnswer"
+      v-if="state.initTimer"
+      :enable-next-button="state.userSelectedAnswer !== undefined"
       @next="nextQuestionHandler"
     />
   </div>
@@ -40,6 +41,8 @@ interface GameControllerState {
   currentCorrectAnswer: string
   userSelectedAnswer?: string
   isCurrentSelectedAnswerCorrect: boolean
+  initTimer: boolean
+  totalScore: number
 }
 
 export default defineComponent({
@@ -47,7 +50,7 @@ export default defineComponent({
   setup(_props, _context) {
     const state: GameControllerState = reactive({
       questions: undefined,
-      totalQuestions: computed(() => state.questions!.length || 0),
+      totalQuestions: computed(() => state.questions!.length),
       currentQuestionIndex: 0,
       currentQuestion: computed(() => state.questions?.at(state.currentQuestionIndex)),
       currentQuestionText: computed(() => state.currentQuestion?.question),
@@ -61,6 +64,8 @@ export default defineComponent({
       isCurrentSelectedAnswerCorrect: computed(
         () => state.currentCorrectAnswer === state.userSelectedAnswer
       ),
+      initTimer: false,
+      totalScore: 0,
       loading: false
     })
 
@@ -72,8 +77,8 @@ export default defineComponent({
       state.userSelectedAnswer = optionKey
     }
 
-    const nextQuestionHandler = () => {
-      nextQuestion(state)
+    const nextQuestionHandler = (score: number) => {
+      nextQuestion(state, score)
     }
 
     return {
@@ -88,14 +93,21 @@ const getQuizByCategory = async (state: GameControllerState) => {
   try {
     state.loading = true
     state.questions = await QuizService.getQuizByCategory('code')
+    state.initTimer = true
     state.loading = false
   } catch (_error) {}
 }
 
-const nextQuestion = (state: GameControllerState) => {
-  if (state.currentQuestionIndex < state.totalQuestions - 1) {
+const nextQuestion = (state: GameControllerState, score: number) => {
+  if (state.currentQuestionIndex < state.totalQuestions) {
+    state.totalScore += score
+    state.initTimer = false
     state.currentQuestionIndex++
     state.userSelectedAnswer = undefined
+
+    setTimeout(() => {
+      state.initTimer = true
+    }, 1000)
   }
 }
 </script>
