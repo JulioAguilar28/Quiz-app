@@ -29,6 +29,7 @@ import GameControlsController from './GameControlsController.vue'
 import * as QuizService from '@/services/QuizService'
 import type { Question } from '@/models/Question'
 import type { CorrectAnswers, PossibleAnswers } from '@/models/AppModels'
+import ComponentContext, { buildComponentContext } from '@/utils/ComponentContext'
 
 interface GameControllerState {
   questions?: Array<Question>
@@ -47,7 +48,9 @@ interface GameControllerState {
 
 export default defineComponent({
   components: { Option, QuestionView, GameControlsController },
-  setup(_props, _context) {
+  setup(_props, setupContext) {
+    const context: ComponentContext = buildComponentContext(setupContext)
+
     const state: GameControllerState = reactive({
       questions: undefined,
       totalQuestions: computed(() => state.questions!.length),
@@ -70,7 +73,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      getQuizByCategory(state)
+      getQuizByCategory(state, context)
     })
 
     const selectOptionHandler = (optionKey: string) => {
@@ -78,7 +81,7 @@ export default defineComponent({
     }
 
     const nextQuestionHandler = (score: number) => {
-      nextQuestion(state, score)
+      nextQuestion(state, context, score)
     }
 
     return {
@@ -89,7 +92,7 @@ export default defineComponent({
   }
 })
 
-const getQuizByCategory = async (state: GameControllerState) => {
+const getQuizByCategory = async (state: GameControllerState, _context: ComponentContext) => {
   try {
     state.loading = true
     state.questions = await QuizService.getQuizByCategory('code')
@@ -98,7 +101,7 @@ const getQuizByCategory = async (state: GameControllerState) => {
   } catch (_error) {}
 }
 
-const nextQuestion = (state: GameControllerState, score: number) => {
+const nextQuestion = (state: GameControllerState, _context: ComponentContext, score: number) => {
   if (state.currentQuestionIndex < state.totalQuestions) {
     state.totalScore += score
     state.initTimer = false

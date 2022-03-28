@@ -13,6 +13,7 @@
 <script lang="ts">
 import { defineComponent, reactive, onMounted } from '@nuxtjs/composition-api'
 import Button from './Button.vue'
+import ComponentContext, { buildComponentContext } from '@/utils/ComponentContext'
 
 const ONE_SECOND = 1000
 
@@ -35,29 +36,31 @@ export default defineComponent({
   emits: {
     [GameControlsControllerEvents.Next]: null
   },
-  setup(_, { emit }) {
+  setup(_, setupContext) {
+    const context = buildComponentContext(setupContext)
+
     const state: GameControlsControllerState = reactive({
       remainingTime: 30
     })
 
     onMounted(() => {
-      initTimer(state, emit)
+      initTimer(state, context)
     })
 
     const nextHandler = () => {
-      emit(GameControlsControllerEvents.Next, state.remainingTime)
+      context.$emit(GameControlsControllerEvents.Next, state.remainingTime)
     }
 
     return { state, nextHandler }
   }
 })
 
-const initTimer = (state: GameControlsControllerState, emit: any) => {
+const initTimer = (state: GameControlsControllerState, _context: ComponentContext) => {
   const timerId = setInterval(() => {
     state.remainingTime--
 
     if (state.remainingTime === 0) {
-      emit(GameControlsControllerEvents.Next, 0)
+      // emit(GameControlsControllerEvents.Next, 0)
       clearInterval(timerId)
     }
   }, ONE_SECOND)
