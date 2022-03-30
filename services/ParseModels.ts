@@ -19,14 +19,21 @@ const parseCorrectAnswers = (answers: any): CorrectAnswers => ({
   answerF: answers.answer_f_correct
 })
 
+const getCorrectAnswer = (answers: CorrectAnswers): string =>
+  Object.entries(answers)
+    .find(([_key, value]) => value === 'true')
+    .at(0) as string
+
 export const parseQuestion = (data: any) => {
+  const correctAnswers = parseCorrectAnswers(data.correct_answers)
+
   const question: QuestionModel = {
     id: data.id,
     question: data.question,
     possibleAnswers: parsePossibleAnswers(data.answers),
     category: data.category,
-    correctAnswer: data.correct_answer,
-    correctAnswers: parseCorrectAnswers(data.correct_answers),
+    correctAnswers,
+    correctAnswer: getCorrectAnswer(correctAnswers),
     difficulty: data.difficulty,
     multipleCorrectAnswers: data.multiple_correct_answers
   }

@@ -9,6 +9,7 @@ module.exports = {
       secondary: '#333333',
       disabled: '#D1D1D1',
       white: colors.white,
+      red: colors.red,
       gray: colors.gray,
       emerald: colors.emerald,
       indigo: colors.indigo,

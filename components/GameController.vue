@@ -10,6 +10,8 @@
         :key="key"
         :option="value"
         :is-selected="state.userSelectedAnswer === key"
+        :is-correct="state.currentCorrectAnswer === key"
+        :show-correct-answer="state.showCurrentCorrectAnswer"
         @selected="selectOptionHandler(key)"
       />
     </div>
@@ -28,7 +30,7 @@ import Option from './Option.vue'
 import GameControlsController from './GameControlsController.vue'
 import * as QuizService from '@/services/QuizService'
 import type { Question } from '@/models/Question'
-import type { CorrectAnswers, PossibleAnswers } from '@/models/AppModels'
+import type { PossibleAnswers } from '@/models/AppModels'
 import ComponentContext, { buildComponentContext } from '@/utils/ComponentContext'
 
 interface GameControllerState {
@@ -39,9 +41,10 @@ interface GameControllerState {
   loading: boolean
   currentQuestionText?: string
   currentPossibleAnswers?: PossibleAnswers
-  currentCorrectAnswer: string
+  currentCorrectAnswer?: string
   userSelectedAnswer?: string
-  isCurrentSelectedAnswerCorrect: boolean
+  showCurrentCorrectAnswer: boolean
+  isCurrentSelectedAnswerCorrect?: boolean
   initTimer: boolean
   totalScore: number
 }
@@ -58,15 +61,10 @@ export default defineComponent({
       currentQuestion: computed(() => state.questions?.at(state.currentQuestionIndex)),
       currentQuestionText: computed(() => state.currentQuestion?.question),
       currentPossibleAnswers: computed(() => state.currentQuestion?.possibleAnswers),
-      currentCorrectAnswer: computed(() =>
-        Object.entries(state.currentQuestion?.correctAnswers as CorrectAnswers)
-          .find(([_key, value]) => value)!
-          .at(0)
-      ),
+      currentCorrectAnswer: computed(() => state.currentQuestion?.correctAnswer),
       userSelectedAnswer: undefined,
-      isCurrentSelectedAnswerCorrect: computed(
-        () => state.currentCorrectAnswer === state.userSelectedAnswer
-      ),
+      isCurrentSelectedAnswerCorrect: undefined,
+      showCurrentCorrectAnswer: false,
       initTimer: false,
       totalScore: 0,
       loading: false
@@ -101,17 +99,17 @@ const getQuizByCategory = async (state: GameControllerState, _context: Component
   } catch (_error) {}
 }
 
-const nextQuestion = (state: GameControllerState, _context: ComponentContext, score: number) => {
-  if (state.currentQuestionIndex < state.totalQuestions) {
-    state.totalScore += score
-    state.initTimer = false
-    state.currentQuestionIndex++
-    state.userSelectedAnswer = undefined
-
-    setTimeout(() => {
-      state.initTimer = true
-    }, 1000)
-  }
+const nextQuestion = (state: GameControllerState, _context: ComponentContext, _score: number) => {
+  state.showCurrentCorrectAnswer = true
+  // if (state.currentQuestionIndex < state.totalQuestions) {
+  //   state.totalScore += score
+  //   state.initTimer = false
+  //   state.currentQuestionIndex++
+  //   state.userSelectedAnswer = undefined
+  //   setTimeout(() => {
+  //     state.initTimer = true
+  //   }, 1000)
+  // }
 }
 </script>
 
