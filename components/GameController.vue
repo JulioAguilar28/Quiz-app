@@ -3,6 +3,7 @@
     <h2 class="text-xl text-center text-secondary my-4">
       Question number: {{ state.currentQuestionIndex + 1 }}
     </h2>
+    <h2 class="text-xl text-center text-secondary my-4">Score: {{ state.totalScore }}</h2>
     <QuestionView :question="state.currentQuestionText" />
     <div class="px-4 h-auto flex flex-col gap-y-4">
       <Option
@@ -44,7 +45,7 @@ interface GameControllerState {
   currentCorrectAnswer?: string
   userSelectedAnswer?: string
   showCurrentCorrectAnswer: boolean
-  isCurrentSelectedAnswerCorrect?: boolean
+  isCurrentSelectedAnswerCorrect: boolean
   initTimer: boolean
   totalScore: number
 }
@@ -63,8 +64,10 @@ export default defineComponent({
       currentPossibleAnswers: computed(() => state.currentQuestion?.possibleAnswers),
       currentCorrectAnswer: computed(() => state.currentQuestion?.correctAnswer),
       userSelectedAnswer: undefined,
-      isCurrentSelectedAnswerCorrect: undefined,
       showCurrentCorrectAnswer: false,
+      isCurrentSelectedAnswerCorrect: computed(
+        () => state.userSelectedAnswer === state.currentCorrectAnswer
+      ),
       initTimer: false,
       totalScore: 0,
       loading: false
@@ -99,17 +102,19 @@ const getQuizByCategory = async (state: GameControllerState, _context: Component
   } catch (_error) {}
 }
 
-const nextQuestion = (state: GameControllerState, _context: ComponentContext, _score: number) => {
+const nextQuestion = (state: GameControllerState, _context: ComponentContext, score: number) => {
+  state.initTimer = false
   state.showCurrentCorrectAnswer = true
-  // if (state.currentQuestionIndex < state.totalQuestions) {
-  //   state.totalScore += score
-  //   state.initTimer = false
-  //   state.currentQuestionIndex++
-  //   state.userSelectedAnswer = undefined
-  //   setTimeout(() => {
-  //     state.initTimer = true
-  //   }, 1000)
-  // }
+  if (state.isCurrentSelectedAnswerCorrect || score === 0) state.totalScore += score
+
+  if (state.currentQuestionIndex < state.totalQuestions) {
+    setTimeout(() => {
+      state.userSelectedAnswer = undefined
+      state.showCurrentCorrectAnswer = false
+      ++state.currentQuestionIndex
+      state.initTimer = true
+    }, 2000)
+  }
 }
 </script>
 

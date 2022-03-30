@@ -37,6 +37,7 @@ export default defineComponent({
     [GameControlsControllerEvents.Next]: null
   },
   setup(_, setupContext) {
+    // @ts-ignore
     const context = buildComponentContext(setupContext)
 
     const state: GameControlsControllerState = reactive({
@@ -55,12 +56,12 @@ export default defineComponent({
   }
 })
 
-const initTimer = (state: GameControlsControllerState, _context: ComponentContext) => {
+const initTimer = (state: GameControlsControllerState, context: ComponentContext) => {
   const timerId = setInterval(() => {
     state.remainingTime--
 
     if (state.remainingTime === 0) {
-      // emit(GameControlsControllerEvents.Next, 0)
+      context.$emit(GameControlsControllerEvents.Next, 0)
       clearInterval(timerId)
     }
   }, ONE_SECOND)

@@ -53,12 +53,17 @@ export default defineComponent({
       correctClasses: 'bg-emerald-300 text-white',
       wrongClasses: 'bg-red-500 text-white',
       classes: computed(() => {
-        if (props.isSelected && !props.showCorrectAnswer) return state.selectedClasses
+        if (props.isSelected && props.showCorrectAnswer && props.isCorrect)
+          return state.correctClasses
 
-        if (props.isSelected && props.showCorrectAnswer) {
-          if (props.isCorrect) return state.correctClasses
-          else return state.wrongClasses
+        if (props.isSelected && props.showCorrectAnswer && !props.isCorrect)
+          return state.wrongClasses
+
+        if (props.showCorrectAnswer) {
+          return props.isCorrect ? state.correctClasses : state.wrongClasses
         }
+
+        if (props.isSelected) return state.selectedClasses
 
         return state.normalClasses
       })
