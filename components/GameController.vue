@@ -1,5 +1,10 @@
 <template>
   <div v-if="!state.loading" class="h-full flex flex-col">
+    <GameScoreModal
+      :show="state.showScoreModal"
+      :score="state.totalScore"
+      @continue="continueHandler"
+    />
     <h2 class="text-xl text-center text-secondary my-4">
       Question number: {{ state.currentQuestionIndex + 1 }}
     </h2>
@@ -28,6 +33,7 @@
 import { defineComponent, onMounted, reactive, computed } from '@nuxtjs/composition-api'
 import QuestionView from './QuestionView.vue'
 import Option from './Option.vue'
+import GameScoreModal from './modals/GameScoreModal.vue'
 import GameControlsController from './GameControlsController.vue'
 import * as QuizService from '@/services/QuizService'
 import type { Question } from '@/models/Question'
@@ -48,10 +54,11 @@ interface GameControllerState {
   isCurrentSelectedAnswerCorrect: boolean
   initTimer: boolean
   totalScore: number
+  showScoreModal: boolean
 }
 
 export default defineComponent({
-  components: { Option, QuestionView, GameControlsController },
+  components: { Option, QuestionView, GameControlsController, GameScoreModal },
   setup(_props, setupContext) {
     const context: ComponentContext = buildComponentContext(setupContext)
 
@@ -70,6 +77,7 @@ export default defineComponent({
       ),
       initTimer: false,
       totalScore: 0,
+      showScoreModal: false,
       loading: false
     })
 
@@ -85,10 +93,15 @@ export default defineComponent({
       nextQuestion(state, context, score)
     }
 
+    const continueHandler = () => {
+      context.$router.push('ranking')
+    }
+
     return {
       state,
       selectOptionHandler,
-      nextQuestionHandler
+      nextQuestionHandler,
+      continueHandler
     }
   }
 })
@@ -107,14 +120,19 @@ const nextQuestion = (state: GameControllerState, _context: ComponentContext, sc
   state.showCurrentCorrectAnswer = true
   if (state.isCurrentSelectedAnswerCorrect || score === 0) state.totalScore += score
 
-  if (state.currentQuestionIndex < state.totalQuestions) {
+  if (state.currentQuestionIndex < state.totalQuestions - 1)
+    setTimeout(() => resetValues(state), 2000)
+  else if (state.currentQuestionIndex === state.totalQuestions - 1)
     setTimeout(() => {
-      state.userSelectedAnswer = undefined
-      state.showCurrentCorrectAnswer = false
-      ++state.currentQuestionIndex
-      state.initTimer = true
+      state.showScoreModal = true
     }, 2000)
-  }
+}
+
+const resetValues = (state: GameControllerState) => {
+  state.currentQuestionIndex++
+  state.userSelectedAnswer = undefined
+  state.showCurrentCorrectAnswer = false
+  state.initTimer = true
 }
 </script>
 
