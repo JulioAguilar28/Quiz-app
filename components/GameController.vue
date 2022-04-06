@@ -36,6 +36,7 @@ import Option from './Option.vue'
 import GameScoreModal from './modals/GameScoreModal.vue'
 import GameControlsController from './GameControlsController.vue'
 import * as QuizService from '@/services/QuizService'
+import * as StorageService from '@/services/StorageService'
 import type { Question } from '@/models/Question'
 import type { PossibleAnswers } from '@/models/AppModels'
 import ComponentContext, { buildComponentContext } from '@/utils/ComponentContext'
@@ -108,6 +109,7 @@ export default defineComponent({
 
 const getQuizByCategory = async (state: GameControllerState, _context: ComponentContext) => {
   try {
+    StorageService.initStorage()
     state.loading = true
     state.questions = await QuizService.getQuizByCategory('code')
     state.initTimer = true
@@ -124,7 +126,7 @@ const nextQuestion = (state: GameControllerState, _context: ComponentContext, sc
     setTimeout(() => resetValues(state), 2000)
   else if (state.currentQuestionIndex === state.totalQuestions - 1)
     setTimeout(() => {
-      state.showScoreModal = true
+      finishGame(state)
     }, 2000)
 }
 
@@ -133,6 +135,11 @@ const resetValues = (state: GameControllerState) => {
   state.userSelectedAnswer = undefined
   state.showCurrentCorrectAnswer = false
   state.initTimer = true
+}
+
+const finishGame = (state: GameControllerState) => {
+  state.showScoreModal = true
+  StorageService.saveUserScore('julioam28', state.totalScore)
 }
 </script>
 

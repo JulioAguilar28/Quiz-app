@@ -27,17 +27,7 @@ export interface QuestionModel {
   multipleCorrectAnswers: boolean
 }
 
-// const answers = {
-//   answer_a: '<dl>',
-//   answer_b: '<ul>',
-//   answer_c: '<ol>',
-//   answer_d: '<list>',
-//   answer_e: null,
-//   answer_f: null
-// }
-
-// function someObject<Obj, FirstKey extends keyof Obj>(obj: Obj, firstKey: FirstKey) {
-//   return {} as any
-// }
-
-// someObject(answers, 'answer_a')
+export interface UserRanking {
+  username: string
+  score: number
+}
