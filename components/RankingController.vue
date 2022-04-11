@@ -16,7 +16,7 @@
     </div>
 
     <footer class="mb-6 mr-6 self-end">
-      <Button>Main menu</Button>
+      <Button @click="gotoMainHandler">Main menu</Button>
     </footer>
   </main>
 </template>
@@ -25,15 +25,15 @@
 import { defineComponent, onMounted, reactive } from '@nuxtjs/composition-api'
 import * as StorageService from '@/services/StorageService'
 import { UserRanking } from '@/models/AppModels'
-// import { buildComponentContext } from '@/utils/ComponentContext'
+import { buildComponentContext } from '@/utils/ComponentContext'
 
 interface RankingControllerState {
   users: Array<UserRanking>
 }
 
 export default defineComponent({
-  setup(_, _setupContext) {
-    // const context = buildComponentContext(setupContext)
+  setup(_, setupContext) {
+    const context = buildComponentContext(setupContext)
 
     const state: RankingControllerState = reactive({
       users: []
@@ -43,7 +43,11 @@ export default defineComponent({
       state.users = StorageService.getUsers()
     })
 
-    return { state }
+    const gotoMainHandler = () => {
+      context.$router.replace('main')
+    }
+
+    return { state, gotoMainHandler }
   }
 })
 </script>

@@ -56,6 +56,7 @@ interface GameControllerState {
   initTimer: boolean
   totalScore: number
   showScoreModal: boolean
+  username: string
 }
 
 export default defineComponent({
@@ -79,10 +80,12 @@ export default defineComponent({
       initTimer: false,
       totalScore: 0,
       showScoreModal: false,
-      loading: false
+      loading: false,
+      username: ''
     })
 
     onMounted(() => {
+      state.username = context.$route.query.username as string
       getQuizByCategory(state, context)
     })
 
@@ -139,7 +142,7 @@ const resetValues = (state: GameControllerState) => {
 
 const finishGame = (state: GameControllerState) => {
   state.showScoreModal = true
-  StorageService.saveUserScore('julioam28', state.totalScore)
+  StorageService.saveUserScore(state.username, state.totalScore)
 }
 </script>
 

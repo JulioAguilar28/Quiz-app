@@ -5,9 +5,9 @@ enum StorageKeys {
 }
 
 export const initStorage = () => {
-  const isAlreadyUsers = localStorage.getItem(StorageKeys.Users) !== null
+  const areAlreadyUsers = localStorage.getItem(StorageKeys.Users) !== null
 
-  if (!isAlreadyUsers) localStorage.setItem(StorageKeys.Users, JSON.stringify([]))
+  if (!areAlreadyUsers) localStorage.setItem(StorageKeys.Users, JSON.stringify([]))
 }
 
 export const saveUserScore = (username: string, score: number) => {
