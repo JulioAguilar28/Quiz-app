@@ -1,7 +1,7 @@
 require('custom-env').env(true)
 
 export default {
-  dev: true,
+  dev: process.env.NODE_ENV !== 'production',
 
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
