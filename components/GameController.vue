@@ -10,7 +10,9 @@
     </h2>
     <h2 class="text-xl text-center text-secondary my-4">Score: {{ state.totalScore }}</h2>
     <QuestionView :question="state.currentQuestionText" />
-    <div class="px-4 h-auto flex flex-col gap-y-4">
+    <div
+      class="px-4 h-auto xl:h-full flex flex-col xl:flex-row gap-y-4 xl:gap-x-6 xl:justify-center xl:items-center"
+    >
       <Option
         v-for="(value, key) in state.currentPossibleAnswers"
         :key="key"
