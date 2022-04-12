@@ -1,5 +1,7 @@
 <template>
-  <section class="w-full h-52 bg-primary flex flex-col justify-center items-center px-7 mb-9">
+  <section
+    class="w-full xl:w-2/3 h-52 bg-primary flex flex-col justify-center items-center xl:self-center px-7 mb-9"
+  >
     <h2 class="text-2xl text-white text-center">{{ question }}</h2>
   </section>
 </template>

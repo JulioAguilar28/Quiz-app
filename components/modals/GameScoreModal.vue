@@ -2,14 +2,14 @@
   <vue-final-modal
     v-model="state.show"
     classes="flex justify-center items-center px-2"
-    content-class="bg-white w-full h-2/4 flex flex-col justify-evenly items-center"
+    content-class="bg-white w-full md:w-2/3 h-2/4 flex flex-col justify-evenly md:justify-around items-center"
   >
-    <div class="bg-primary w-60 h-60 rounded-full text-center">
-      <h2 class="text-2xl text-white my-8">Your score</h2>
+    <div class="bg-primary w-60 md:w-72 md:h-72 h-60 rounded-full text-center">
+      <h2 class="text-2xl md:text-3xl text-white my-8 md:my-12">Your score</h2>
       <span class="text-white text-8xl">{{ state.score }}</span>
     </div>
     <div class="self-end mr-4">
-      <Button @click="continueHandler">Continue</Button>
+      <Button class="md:h-14" @click="continueHandler">Continue</Button>
     </div>
   </vue-final-modal>
 </template>

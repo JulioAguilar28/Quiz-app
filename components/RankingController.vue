@@ -16,7 +16,7 @@
     </div>
 
     <footer class="mb-6 mr-6 self-end">
-      <Button @click="gotoMainHandler">Main menu</Button>
+      <Button class="md:w-32" @click="gotoMainHandler">Main menu</Button>
     </footer>
   </main>
 </template>

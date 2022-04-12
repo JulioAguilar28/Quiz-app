@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="option"
-    class="w-full h-auto max-h-40 p-2 flex flex-col items-center justify-center"
+    class="w-full xl:w-auto xl:max-w-full h-auto xl:h-16 max-h-40 xl:max-h-36 p-2 flex flex-col items-center justify-center xl:hover:bg-primary xl:hover:text-white xl:cursor-pointer"
     :class="state.classes"
     @click="selectedHandler"
   >
