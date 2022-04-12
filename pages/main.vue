@@ -14,12 +14,12 @@
       </ul>
 
       <div class="mt-10 flex flex-col">
-        <div class="mb-4">
+        <div class="mb-4 md:flex md:flex-col">
           <input
             v-model="state.username"
             type="text"
             placeholder="Enter your name"
-            class="w-full h-10 border border-secondary rounded-md outline-none focus:border-primary pl-2"
+            class="w-full md:w-48 h-10 border border-secondary rounded-md outline-none focus:border-primary pl-2"
             @keyup.enter="startGameHandler"
           />
           <span v-show="state.areThereErrors" class="text-red-600 text-sm"
